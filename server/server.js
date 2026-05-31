@@ -5,10 +5,10 @@ const store = require("./store");
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
-const BASE_URL =
-    "https://ad9bd71f-8b18-4464-9406-b156f227af96-00-23tp6jt52nota.sisko.replit.dev/";
+//Replace with your local IPv4 address
+const BASE_URL = "IP_ADDRESS_HERE";
 
 app.use(cors());
 app.use(express.json());
@@ -18,7 +18,7 @@ app.post("/shorten", (req, res) => {
 
     if (!url) {
         return res.status(400).json({
-            error: "No URL provided",
+            error: "No URL provided"
         });
     }
 
@@ -27,7 +27,7 @@ app.post("/shorten", (req, res) => {
     store.set(id, url);
 
     res.json({
-        shortUrl: `${BASE_URL}/${id}`,
+        shortUrl: `${BASE_URL}/${id}`
     });
 });
 
@@ -45,6 +45,6 @@ app.get("/", (req, res) => {
     res.send("URL Shortener API Running");
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running at ${BASE_URL}`);
 });
