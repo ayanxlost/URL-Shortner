@@ -4,16 +4,23 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
 
     if (!url) return;
 
-    const res = await fetch("https://ad9bd71f-8b18-4464-9406-b156f227af96-00-23tp6jt52nota.sisko.replit.dev/shorten", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url })
-    });
+    try {
+        const res = await fetch("IP_ADDRESS_HERE/shorten", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ url })
+        });
 
-    const data = await res.json();
+        const data = await res.json();
 
-    if (data.shortUrl) {
-        showPopup(url, data.shortUrl);
-        input.value = "";
+        if (data.shortUrl) {
+            showPopup(url, data.shortUrl);
+            input.value = "";
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Failed to connect to server.");
     }
 });
