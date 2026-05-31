@@ -4,33 +4,35 @@ const { nanoid } = require("nanoid");
 const store = require("./store");
 
 const app = express();
+const PORT = process.env.PORT || 443;
 
-const PORT = 3000;
+// IMPORTANT: change this to YOUR backend URL
+const BASE_URL = "";
 
-//Replace with your local IPv4 address
-const BASE_URL = "IP_ADDRESS_HERE";
+app.use(cors({
+    origin: "*"
+}));
 
-app.use(cors());
 app.use(express.json());
 
+// Create short URL
 app.post("/shorten", (req, res) => {
     const { url } = req.body;
 
     if (!url) {
-        return res.status(400).json({
-            error: "No URL provided"
-        });
+        return res.status(400).json({ error: "No URL provided" });
     }
 
     const id = nanoid(6);
-
     store.set(id, url);
 
     res.json({
+        id: id,
         shortUrl: `${BASE_URL}/${id}`
     });
 });
 
+// Redirect short URL
 app.get("/:id", (req, res) => {
     const url = store.get(req.params.id);
 
@@ -41,10 +43,11 @@ app.get("/:id", (req, res) => {
     res.redirect(url);
 });
 
+// Health check
 app.get("/", (req, res) => {
     res.send("URL Shortener API Running");
 });
 
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running at ${BASE_URL}`);
+    console.log(`Server running on ${BASE_URL}`);
 });
